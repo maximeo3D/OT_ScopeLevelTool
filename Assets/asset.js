@@ -1,61 +1,31 @@
 const assetConfiguration = {
   models: {
     "part_model": {
-      name: "Modèle Part",
+      name: "Scope Level Tool",
       file: "part.glb",
       format: "bin",
       dataOffset: 66,
       meshes: {
-        "bloc": {
-          materialSlots: ["slot1"],
+        "scopeleveltool": {
+          materialSlots: ["slot1", "slot2"],
           tags: ["base"]
-        },
-        "flag": {
-          materialSlots: ["slot1"],
-          tags: ["flag"]
-        },
-        "engraving": {
-          materialSlots: ["slot1"],
-          tags: ["engraving"]
         }
       }
     }
   },
   materialConfigs: {
-    "bloc": {
-      "red": {
-        "slot1": "red"
+    "scopeleveltool": {
+      "black": {
+        "slot1": "scopeleveler_black",
+        "slot2": "ot"
       },
-      "blue": {
-        "slot1": "blue"
+      "grey": {
+        "slot1": "scopeleveler_grey",
+        "slot2": "ot"
       },
-      "green": {
-        "slot1": "green"
-      }
-    },
-    "flag": {
-      "none": {
-        "slot1": "red"
-      },
-      "france": {
-        "slot1": "flag_fr"
-      },
-      "unitedstates": {
-        "slot1": "flag_us"
-      },
-      "germany": {
-        "slot1": "flag_ger"
-      }
-    },
-    "engraving": {
-      "red": {
-        "slot1": "engraving_red"
-      },
-      "blue": {
-        "slot1": "engraving_blue"
-      },
-      "green": {
-        "slot1": "engraving_green"
+      "white": {
+        "slot1": "scopeleveler_white",
+        "slot2": "ot"
       }
     }
   }
