@@ -1323,26 +1323,42 @@ class TweakpaneManager {
     
     // Utility methods
     async getAvailableImages() {
+        // serve.ps1 exposes /api/textures. GitHub Pages is static and publishes Textures/texture-list.json instead.
+        const fromApi = await this.loadTextureIndex('api/textures');
+        if (fromApi) {
+            return fromApi;
+        }
+
+        const fromManifest = await this.loadTextureIndex('Textures/texture-list.json');
+        if (fromManifest) {
+            return fromManifest;
+        }
+
+        console.warn('⚠️ Impossible de charger la liste des textures, utilisation de la liste par défaut');
+        return this.getDefaultImages();
+    }
+
+    async loadTextureIndex(url) {
         try {
-            const response = await fetch('api/textures');
-            if (response.ok) {
-                const data = await response.json();
-                const images = {};
-                // S'assurer que "None" est toujours en premier
-                images['None'] = 'None';
-                data.images.forEach(imageName => {
-                    if (imageName !== 'None') {
-                        images[imageName] = imageName;
-                    }
-                });
-                return images;
-            } else {
-                console.warn('⚠️ Impossible de charger la liste des textures, utilisation de la liste par défaut');
-                return this.getDefaultImages();
+            const response = await fetch(url);
+            if (!response.ok) {
+                return null;
             }
-        } catch (error) {
-            console.warn('⚠️ Erreur lors du chargement des textures:', error);
-            return this.getDefaultImages();
+            const data = await response.json();
+            if (!data || !Array.isArray(data.images)) {
+                return null;
+            }
+            const images = {};
+            // S'assurer que "None" est toujours en premier
+            images['None'] = 'None';
+            data.images.forEach(imageName => {
+                if (imageName && imageName !== 'None') {
+                    images[imageName] = imageName;
+                }
+            });
+            return images;
+        } catch (_) {
+            return null;
         }
     }
     

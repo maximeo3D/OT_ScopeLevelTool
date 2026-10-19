@@ -23,6 +23,39 @@ shopt -s nullglob
 cp "$ROOT"/Textures/*.{png,jpg,jpeg,webp} "$DIST/Textures/" 2>/dev/null || true
 shopt -u nullglob
 
+# Environment map. PBR materials render black when this file is missing on Pages.
+if [ -d "$ROOT/Textures/HDR" ]; then
+  mkdir -p "$DIST/Textures/HDR"
+  cp -a "$ROOT/Textures/HDR/." "$DIST/Textures/HDR/"
+fi
+
+# Static texture index. GitHub Pages has no /api/textures (that route exists only in serve.ps1).
+texture_list="$(mktemp)"
+find "$ROOT/Textures" -maxdepth 1 -type f \
+  \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.gif' -o -iname '*.bmp' -o -iname '*.tga' \) \
+  -printf '%f\n' | sort -u > "$texture_list"
+
+{
+  printf '{\n  "images": ['
+  first=1
+  while IFS= read -r name || [ -n "$name" ]; do
+    [ -z "$name" ] && continue
+    escaped=${name//\\/\\\\}
+    escaped=${escaped//\"/\\\"}
+    if [ "$first" -eq 1 ]; then
+      first=0
+    else
+      printf ','
+    fi
+    printf '\n    "%s"' "$escaped"
+  done < "$texture_list"
+  if [ "$first" -eq 0 ]; then
+    printf '\n'
+  fi
+  printf '  ]\n}\n'
+} > "$DIST/Textures/texture-list.json"
+rm -f "$texture_list"
+
 # Prevent Jekyll from processing the site on GitHub Pages
 touch "$DIST/.nojekyll"
 
