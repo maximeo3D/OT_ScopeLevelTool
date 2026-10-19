@@ -65,25 +65,49 @@ find "$ROOT/Textures" -maxdepth 1 -type f \
   printf '  ]\n}\n'
 } > "$DIST/Textures/texture-list.json"
 rm -f "$texture_list"
+
+# The published site has no /api/textures. Skip that request so the browser console stays clean.
+sed -i 's/this.useStaticTextureIndex = false;/this.useStaticTextureIndex = true;/' "$DIST/tweakpaneManager.js"
 ```
+
+Placer le `sed` juste après la copie de `tweakpaneManager.js` vers `dist/`, ou avec le bloc ci-dessus. Il ne modifie que la copie publiée. Le fichier source reste à `false` pour que `serve.ps1` continue de répondre en local.
 
 Le manifeste est généré depuis les fichiers de **ce** dépôt. Ne pas y coller la liste d’un autre projet.
 
 ### 2. `tweakpaneManager.js`
 
-Remplacer `getAvailableImages()` par les deux méthodes ci-dessous. Ne pas réécrire `getDefaultImages()` avec les PNG du projet : cette liste n’est qu’un dernier recours, et elle ne répare ni le site statique ni l’objet noir.
+Ne pas réécrire `getDefaultImages()` avec les PNG du projet : cette liste n’est qu’un dernier recours, et elle ne répare ni le site statique ni l’objet noir.
+
+Dans le constructeur, à côté de `this.initialVisibility` :
+
+```javascript
+// false en local (serve.ps1). Le build Pages passe cette valeur à true dans dist/.
+this.useStaticTextureIndex = false;
+```
+
+Remplacer `getAvailableImages()` par :
 
 ```javascript
 async getAvailableImages() {
+    // Sur GitHub Pages, ne pas appeler api/textures : le navigateur affiche le 404 même si le repli réussit.
+    if (this.useStaticTextureIndex) {
+        const fromManifest = await this.loadTextureIndex('Textures/texture-list.json');
+        if (fromManifest) {
+            return fromManifest;
+        }
+    }
+
     // serve.ps1 exposes /api/textures. GitHub Pages is static and publishes Textures/texture-list.json instead.
     const fromApi = await this.loadTextureIndex('api/textures');
     if (fromApi) {
         return fromApi;
     }
 
-    const fromManifest = await this.loadTextureIndex('Textures/texture-list.json');
-    if (fromManifest) {
-        return fromManifest;
+    if (!this.useStaticTextureIndex) {
+        const fromManifest = await this.loadTextureIndex('Textures/texture-list.json');
+        if (fromManifest) {
+            return fromManifest;
+        }
     }
 
     console.warn('⚠️ Impossible de charger la liste des textures, utilisation de la liste par défaut');
@@ -135,7 +159,9 @@ Servir `dist/` (`python -m http.server 8000` lancé dans `dist/`) et ouvrir la p
 
 - `Textures/HDR/default.env` répond 200 ;
 - `Textures/texture-list.json` répond 200 ;
-- `api/textures` peut rester en 404 : le menu doit quand même afficher les textures de ce projet ;
+- la console ne contient pas de requête vers `api/textures` ;
+- `dist/tweakpaneManager.js` contient `this.useStaticTextureIndex = true` ;
+- le menu affiche les textures de ce projet ;
 - le modèle n’est plus noir.
 
 `dist/` est ignoré par git. Pousser les deux fichiers sources sur la branche qui déclenche le workflow Pages (`master` dans le template). Le site publié ne change qu’après ce déploiement.

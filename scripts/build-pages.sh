@@ -16,6 +16,9 @@ cp "$ROOT/index.html" \
    "$ROOT/studio.json" \
    "$DIST/"
 
+# The published site has no /api/textures. Skip that request so the browser console stays clean.
+sed -i 's/this.useStaticTextureIndex = false;/this.useStaticTextureIndex = true;/' "$DIST/tweakpaneManager.js"
+
 cp "$ROOT/Assets/asset.js" "$ROOT/Assets/part.bin" "$DIST/Assets/"
 cp "$ROOT/Textures/materials.json" "$DIST/Textures/"
 # Copy texture images if present
