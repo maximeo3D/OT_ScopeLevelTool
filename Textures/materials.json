@@ -5,16 +5,16 @@
       "parent": "none",
       "baseColor": "#808080",
       "metallic": 0,
-      "roughness": 0.75,
+      "roughness": 0.5,
       "alpha": 1,
       "albedoTexture": "None",
       "metallicTexture": "None",
       "microSurfaceTexture": "None",
-      "ambientTexture": "sl_ao.png",
+      "ambientTexture": "None",
       "opacityTexture": "None",
       "bumpTexture": "sl_normal.png",
-      "bumpTextureIntensity": 1,
-      "lightmapTexture": "None",
+      "bumpTextureIntensity": 0.5,
+      "lightmapTexture": "sl_ao.png",
       "useLightmapAsShadowmap": true,
       "backFaceCulling": true,
       "uOffset": 0,
@@ -27,10 +27,7 @@
     "scopeleveler_black": {
       "type": "pbr",
       "parent": "scopeleveler_base",
-      "baseColor": "#000000",
-      "roughness": 0.75,
-      "ambientTexture": "None",
-      "lightmapTexture": "sl_ao.png"
+      "baseColor": "#000000"
     },
     "scopeleveler_grey": {
       "type": "pbr",

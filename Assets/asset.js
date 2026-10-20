@@ -7,7 +7,7 @@ const assetConfiguration = {
       dataOffset: 66,
       meshes: {
         "scopeleveltool": {
-          materialSlots: ["slot1", "slot2"],
+          materialSlots: ["slot1", "slot2", "slot3"],
           tags: ["base"]
         }
       }
@@ -17,15 +17,18 @@ const assetConfiguration = {
     "scopeleveltool": {
       "black": {
         "slot1": "scopeleveler_black",
-        "slot2": "ot"
+        "slot2": "scopeleveler_white",
+        "slot3": "ot"
       },
       "grey": {
         "slot1": "scopeleveler_grey",
-        "slot2": "ot"
+        "slot2": "scopeleveler_white",
+        "slot3": "ot"
       },
       "white": {
-        "slot1": "scopeleveler_white",
-        "slot2": "ot"
+        "slot1": "scopeleveler_white", 
+        "slot2": "scopeleveler_black",
+        "slot3": "ot"
       }
     }
   }
