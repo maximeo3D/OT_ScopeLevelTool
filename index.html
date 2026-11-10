@@ -2,14 +2,17 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Scope Level Tool</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- Intégration : api.json — window.viewer après l'événement viewer-api-ready -->
+    <title>Modèle Part</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/styles.css">
+    
     <script src="https://cdn.babylonjs.com/v7.54.2/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/v7.54.2/loaders/babylonjs.loaders.min.js"></script>
     <script>
-        // Configure decoders for better mobile GLB compatibility
         if (window.BABYLON && BABYLON.DracoCompression) {
-            // Use CDN Draco
             BABYLON.DracoCompression.Configuration = {
                 decoder: {
                     wasmUrl: 'https://cdn.babylonjs.com/v7.54.2/draco_wasm_wrapper_gltf.js',
@@ -20,114 +23,27 @@
         }
         if (window.BABYLON && BABYLON.MeshoptCompression) {
             BABYLON.MeshoptCompression.Configuration = {
-                decoder: {
-                    url: 'https://cdn.babylonjs.com/v7.54.2/meshopt_decoder.js'
-                }
+                decoder: { url: 'https://cdn.babylonjs.com/v7.54.2/meshopt_decoder.js' }
             };
         }
     </script>
     <script src="https://cdn.babylonjs.com/v7.54.2/materialsLibrary/babylonjs.materials.min.js"></script>
     <script src="https://cdn.babylonjs.com/v7.54.2/hdr/babylonjs.hdr.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tweakpane@3.1.10/dist/tweakpane.min.js"></script>
-    <script src="tweakpaneManager.js"></script>
-    <script src="engravingManager.js"></script>
-    <script>
-        // Contrôle de visibilité de la sidebar
-        const showSidebar = false; // Changez true/false pour afficher/cacher la sidebar
-        const showTweakpane = false; // Changez true/false pour afficher/cacher Tweakpane
-        // Exposer pour scene.js
-        window.showTweakpane = showTweakpane;
-        document.addEventListener('DOMContentLoaded', () => {
-            // Propager la préférence de visibilité vers le CSS
-            document.documentElement.style.setProperty('--sidebar-display', showSidebar ? 'flex' : 'none');
-            // Forcer un resize Babylon pour recalculer le ratio si la largeur change
-            window.dispatchEvent(new Event('resize'));
-        });
-        
-        // Configuration par défaut
-        const defaultConfig = {
-            option: 'base',
-            scopelevelerColor: 'black'
-        };
-    </script>
+    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/tweakpaneManager.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/engravingManager.js"></script>
 </head>
 <body>
     <div class="container">
-        <div class="sidebar">
-            <div class="sidebar-content">
-                <div class="category">
-                    <h3>Scope Leveler</h3>
-                    <div class="buttons">
-                        <button class="sidebar-btn" id="sl-black-btn">Black</button>
-                        <button class="sidebar-btn" id="sl-grey-btn">Grey</button>
-                        <button class="sidebar-btn" id="sl-white-btn">White</button>
-                    </div>
-                </div>
-                
-                <div class="category">
-                    <h3>Viewpoints</h3>
-                    <div class="buttons">
-                        <button class="sidebar-btn" id="viewpoint-1-btn">Viewpoint 1</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="canvas-container">
             <canvas id="renderCanvas"></canvas>
         </div>
     </div>
-    <script src="scene.js"></script>
     <script>
-        // Connecter les boutons HTML au système de tags
-        document.addEventListener('DOMContentLoaded', function() {
-            // Attendre que le TagManager soit initialisé
-            setTimeout(() => {
-                if (window.tagManager) {
-                    const colors = ['black', 'grey', 'white'];
-
-                    colors.forEach(color => {
-                        const btn = document.getElementById(`sl-${color}-btn`);
-                        if (!btn) return;
-                        btn.addEventListener('click', () => {
-                            window.tagManager.applyMaterialConfig('scopeleveltool', color);
-                            updateButtonStates();
-                        });
-                    });
-                    
-                    // Viewpoint button
-                    const vp1Btn = document.getElementById('viewpoint-1-btn');
-                    if (vp1Btn) vp1Btn.addEventListener('click', () => { 
-                        if (window.gotoViewpoint) window.gotoViewpoint('Viewpoint1');
-                        vp1Btn.classList.add('active');
-                    });
-                    
-                    // Appliquer la configuration par défaut
-                    window.tagManager.setOption(defaultConfig.option);
-                    window.tagManager.applyMaterialConfig('scopeleveltool', defaultConfig.scopelevelerColor);
-                    window.tagManager.applyActiveTags();
-                    
-                    // Mettre à jour l'état initial des boutons
-                    updateButtonStates();
-                    if (vp1Btn) vp1Btn.classList.add('active');
-                }
-            }, 1000);
-            
-            function updateButtonStates() {
-                if (!window.tagManager) return;
-                
-                const activeTags = window.tagManager.getActiveTags();
-                const colors = ['black', 'grey', 'white'];
-
-                colors.forEach(color => {
-                    const btn = document.getElementById(`sl-${color}-btn`);
-                    if (!btn) return;
-                    btn.classList.remove('active');
-                    if (activeTags.materials && activeTags.materials.scopeleveltool === color) {
-                        btn.classList.add('active');
-                    }
-                });
-            }
-        });
+        window.showTweakpane = false;
+        window.viewerApplyDefaults = true;
     </script>
+    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/scene.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/maximeo3D/3D-Viewer@v1.0.0/viewerApi.js"></script>
 </body>
 </html>

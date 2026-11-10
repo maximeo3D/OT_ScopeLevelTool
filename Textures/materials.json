@@ -1,4 +1,4 @@
-﻿{
+{
   "materials": {
     "scopeleveler_base": {
       "type": "pbr",
@@ -27,17 +27,19 @@
     "scopeleveler_black": {
       "type": "pbr",
       "parent": "scopeleveler_base",
-      "baseColor": "#000000"
+      "baseColor": "#000000",
+      "roughness": 0.8
     },
     "scopeleveler_grey": {
       "type": "pbr",
       "parent": "scopeleveler_base",
-      "baseColor": "#1c1c1c"
+      "baseColor": "#575757"
     },
     "scopeleveler_white": {
       "type": "pbr",
       "parent": "scopeleveler_base",
-      "baseColor": "#999999"
+      "baseColor": "#ffffff",
+      "lightmapTexture": "sl_ao_light.png"
     },
     "ot": {
       "type": "pbr",
@@ -53,7 +55,7 @@
       "opacityTexture": "None",
       "bumpTexture": "OT_normal.png",
       "bumpTextureIntensity": 1,
-      "lightmapTexture": "OT_ao.png",
+      "lightmapTexture": "None",
       "useLightmapAsShadowmap": true,
       "backFaceCulling": true,
       "uOffset": 0,
