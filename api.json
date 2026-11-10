@@ -1,0 +1,104 @@
+{
+  "description": "Contrat d'intégration du viewer. Attendre l'événement viewer-api-ready, puis appeler window.viewer. Les identifiants de la section project sont ceux de ce zip.",
+  "ready": {
+    "event": "viewer-api-ready",
+    "flag": "window.viewerReady",
+    "object": "window.viewer",
+    "listen": "window.addEventListener('viewer-api-ready', function () { var viewer = window.viewer; });"
+  },
+  "methods": {
+    "applyRule": {
+      "call": "viewer.applyRule(ruleId, optionId)",
+      "args": [
+        "ruleId",
+        "optionId"
+      ],
+      "description": "Applique une option de règle (matériau, visibilité, etc.)."
+    },
+    "setEngravingText": {
+      "call": "viewer.setEngravingText(engravingId, text)",
+      "args": [
+        "engravingId",
+        "text"
+      ],
+      "description": "Change le texte d’une zone de gravure."
+    },
+    "setEngravingFont": {
+      "call": "viewer.setEngravingFont(engravingId, fontName)",
+      "args": [
+        "engravingId",
+        "fontName"
+      ],
+      "description": "Change la police d’une zone de gravure. fontName doit figurer dans project.engravings[].fonts."
+    },
+    "gotoViewpoint": {
+      "call": "viewer.gotoViewpoint(viewpointId)",
+      "args": [
+        "viewpointId"
+      ],
+      "description": "Place la caméra sur un point de vue."
+    },
+    "getRules": {
+      "call": "viewer.getRules()",
+      "description": "Liste les règles et leurs options."
+    },
+    "getEngravings": {
+      "call": "viewer.getEngravings()",
+      "description": "Liste les zones de gravure."
+    },
+    "getFonts": {
+      "call": "viewer.getFonts()",
+      "description": "Liste les polices disponibles."
+    },
+    "getViewpoints": {
+      "call": "viewer.getViewpoints()",
+      "description": "Liste les points de vue."
+    },
+    "getDefaultViewpoint": {
+      "call": "viewer.getDefaultViewpoint()",
+      "description": "Identifiant du point de vue par défaut."
+    },
+    "getDefaults": {
+      "call": "viewer.getDefaults()",
+      "description": "Valeurs par défaut (règles, gravure)."
+    }
+  },
+  "project": {
+    "rules": [
+      {
+        "id": "color",
+        "label": "Couleur",
+        "options": [
+          {
+            "id": "red",
+            "label": "Black"
+          },
+          {
+            "id": "red22",
+            "label": "White"
+          }
+        ]
+      }
+    ],
+    "engravings": [],
+    "fonts": [],
+    "viewpoints": [
+      {
+        "id": "Viewpoint",
+        "label": "Viewpoint"
+      }
+    ],
+    "defaultViewpoint": "Viewpoint",
+    "defaults": {
+      "rules": {
+        "color": "red"
+      },
+      "engravingText": "Test",
+      "engravingFont": "Stencil"
+    }
+  },
+  "examples": [
+    "viewer.applyRule('color', 'red')",
+    "viewer.gotoViewpoint('Viewpoint')"
+  ]
+}

@@ -1,37 +1,72 @@
 const assetConfiguration = {
-  models: {
+  "models": {
     "part_model": {
-      name: "Scope Level Tool",
-      file: "part.glb",
-      format: "bin",
-      dataOffset: 66,
-      meshes: {
+      "name": "Modèle Part",
+      "file": "part.bin",
+      "format": "bin",
+      "dataOffset": 66,
+      "meshes": {
         "scopeleveltool": {
-          materialSlots: ["slot1", "slot2", "slot3"],
-          tags: ["base"]
+          "slots": [
+            "ScoleLeveler",
+            "angles",
+            "OT"
+          ],
+          "engraving": false,
+          "file": "part.bin"
         }
-      }
+      },
+      "files": [
+        {
+          "file": "part.bin",
+          "format": "bin"
+        }
+      ]
     }
   },
-  materialConfigs: {
-    "scopeleveltool": {
-      "black": {
-        "slot1": "scopeleveler_black",
-        "slot2": "scopeleveler_white",
-        "slot3": "ot"
-      },
-      "grey": {
-        "slot1": "scopeleveler_grey",
-        "slot2": "scopeleveler_white",
-        "slot3": "ot"
-      },
-      "white": {
-        "slot1": "scopeleveler_white", 
-        "slot2": "scopeleveler_black",
-        "slot3": "ot"
-      }
+  "rules": [
+    {
+      "id": "color",
+      "label": "Couleur",
+      "options": [
+        {
+          "id": "red",
+          "label": "Black",
+          "meshes": {
+            "scopeleveltool": {
+              "materials": {
+                "ScoleLeveler": "scopeleveler_black",
+                "angles": "scopeleveler_white",
+                "OT": "ot"
+              }
+            }
+          }
+        },
+        {
+          "id": "red22",
+          "label": "White",
+          "meshes": {
+            "scopeleveltool": {
+              "materials": {
+                "ScoleLeveler": "scopeleveler_white",
+                "angles": "scopeleveler_black",
+                "OT": "ot"
+              }
+            }
+          }
+        }
+      ]
     }
-  }
+  ],
+  "defaults": {
+    "rules": {
+      "color": "red"
+    },
+    "engravingText": "Test",
+    "engravingFont": "Stencil"
+  },
+  "fonts": [],
+  "engravings": []
 };
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = assetConfiguration;
