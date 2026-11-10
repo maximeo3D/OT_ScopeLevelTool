@@ -1,0 +1,9 @@
+{
+  "images": [
+    "OT_diffuse.png",
+    "OT_normal.png",
+    "sl_ao.png",
+    "sl_ao_light.png",
+    "sl_normal.png"
+  ]
+}
